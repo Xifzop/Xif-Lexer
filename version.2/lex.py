@@ -37,20 +37,3 @@ class Lexer(object):
 	'''
 	def clean_patterns(self):
 		self.pattern = PatternMatcher()
-
-
-# Do lexical Analysing ..
-if __name__ == '__main__':	
-	l = Lexer()
-
-	# l.matcher += Pattern('Int', r'([1-9][0-9]*)?[0-9]')
-	# l.matcher += Pattern('Var', r'[A-Za-z]+')
-	# l.matcher += Pattern('Float', r'([1-9][0-9]*)?[0-9]\.[0-9]*')
-	# l.matcher += Pattern('Plus', r'\+')
-	# l.matcher += Pattern('Left', r'\[')
-	# l.matcher += Pattern('Right', r'\]')
-	# l.matcher += Pattern('semi', r';')
-
-	# for term in l.analyse('test.in'):
-	# 	print term
-	l.load_patterns('patterns.json')
