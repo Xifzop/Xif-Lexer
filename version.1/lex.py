@@ -25,7 +25,6 @@ class Lexer(object):
 				patterns = json.loads(fjson.read())
 				for ptn in patterns:
 					if len(ptn):
-						print ptn
 						ptn = ptn.items()[0]
 						self.matcher += Pattern(*ptn)
 			return True

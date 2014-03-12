@@ -29,6 +29,7 @@ def init_states():
 			error_state.name     : error_state
 		}
 
+
 		# callbacks for empty state
 		def empty_get_char_matched(info):
 			return not PatternMatcher.match_whole(r'\s', info[LexAnalyser.LAST_CHAR] )
@@ -69,13 +70,18 @@ def init_states():
 					info[LexAnalyser.PREV_MATCHED] = matcher.match(info[LexAnalyser.CURRENT_STR])
 					return "with_char"
 				else:
-					raise NotMatchedException(info[LexAnalyser.CURRENT_STR])
+					info[LexAnalyser.CURRENT_STR] += current_ch
+					info[LexAnalyser.PREV_MATCHED] = False
+					return "with_char"
+					#raise NotMatchedException(info[LexAnalyser.CURRENT_STR])
+
 
 		def with_char_get_space_matched(info):
 			current_ch = info[LexAnalyser.LAST_CHAR]
 			return PatternMatcher.match_whole(r'\s', current_ch)
 
 		def with_char_get_space_action(info, matcher):
+			current_ch = info[LexAnalyser.LAST_CHAR]
 			current_str = info[LexAnalyser.CURRENT_STR]
 			result = matcher.match(current_str)
 
@@ -86,7 +92,14 @@ def init_states():
 				info[LexAnalyser.PREV_MATCHED] = False
 				return "empty" 
 			else:
-				raise NotMatchedException(info[LexAnalyser.CURRENT_STR])
+				# case for string type..
+				if info[LexAnalyser.CURRENT_STR][0] == '"':
+					info[LexAnalyser.CURRENT_STR] += current_ch
+					info[LexAnalyser.PREV_MATCHED] = False 
+					return "with_char"
+				else:
+					raise NotMatchedException(info[LexAnalyser.CURRENT_STR])
+
 		# end of callbacks defined for with-char state.
 		empty_state.reg_event( "get_char", empty_get_char_matched, empty_get_char_action)
 		empty_state.reg_event( "get_space", empty_get_space_matched, empty_get_space_action)

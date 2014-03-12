@@ -1,9 +1,12 @@
 #! /usr/bin/env python
 from lex_util import *
 
+# Created by Tony H. Improved support for String. But not for escape.
+
 class Lexer(object):
 
-	STATES = init_states()
+	VERSION = 1.1 
+	STATES  = init_states()
 
 	def __init__(self):
 		self.matcher  = PatternMatcher()
@@ -25,7 +28,6 @@ class Lexer(object):
 				patterns = json.loads(fjson.read())
 				for ptn in patterns:
 					if len(ptn):
-						print ptn
 						ptn = ptn.items()[0]
 						self.matcher += Pattern(*ptn)
 			return True

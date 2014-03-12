@@ -1,9 +1,12 @@
 from lex_matcher import *
 from lex_state   import *
+from lex_exception import NotMatchedException
 
 class LexAnalyser(object):
 
 	# Enumerator of the possible state of the machine [ Lexical Analysis ].
+	ESCAPE          = 19
+	STRING_TYPE     = 18
 	TERM_TYPE       = 17
 	CURRENT_STATE   = 16
 	LAST_CHAR       = 15
@@ -14,6 +17,8 @@ class LexAnalyser(object):
 
 	def __init__(self, states, current_state_name, pattern=PatternMatcher()):
 		self.info = {
+			self.ESCAPE          : False,
+			self.STRING_TYPE     : False,
 			self.PREV_MATCHED    : False,
 			self.CURRENT_STR     : "",
 			self.STATES          : states,
@@ -36,3 +41,6 @@ class LexAnalyser(object):
 				self.info[self.NEXT_TERM] = None
 			else:
 				continue
+
+		if not self.info[self.NEXT_TERM]:
+			raise NotMatchedException(self.info[self.CURRENT_STR])
